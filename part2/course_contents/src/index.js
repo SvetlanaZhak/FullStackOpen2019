@@ -5,6 +5,11 @@ const Header = props => {
   return <h1>{props.course}</h1>;
 
 };
+const Total = props => {
+    const total = props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises
+  
+    return <h2>total of {total} exercises</h2>
+  }
   
 const Part = props =>
 <p>{props.part.name} {props.part.exercises}</p>;
@@ -20,7 +25,7 @@ const Course = ({course}) => {
       <div>
         <Header course={course.name} />
         <Content parts={course.parts} />
-     
+     <Total parts={course.parts}/>
       </div>
     )
   }
