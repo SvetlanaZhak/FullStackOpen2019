@@ -11,15 +11,17 @@ const PersonForm = ({ persons, setPersons }) => {
   const onNumberChange = event => {
     setNewNumber(event.target.value);
   };
-  const addPerson = event => {
+
+  /// addPerson
+  const addPerson = async event => {
     event.preventDefault();
     if (checkExistingPer(newName) === false) {
-      const personObject = {
+      const personObject = await personsService.create({
         name: newName,
         number: newNumber
-      };
+      });
+
       setPersons(persons.concat(personObject));
-      personsService.create(personObject);
       setNewName("");
       setNewNumber("");
     } else {
@@ -28,12 +30,9 @@ const PersonForm = ({ persons, setPersons }) => {
   };
 
   const checkExistingPer = newName => {
-    let ExistingPer = false;
-    persons.forEach(person =>
-      person.name === newName ? (ExistingPer = true) : (ExistingPer = false)
-    );
-    return ExistingPer;
+    return !!persons.find(person => person.name === newName);
   };
+
   return (
     <div>
       <form onSubmit={addPerson}>
