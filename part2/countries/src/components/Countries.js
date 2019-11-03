@@ -1,12 +1,15 @@
 import React from "react";
 import Country from "./Country";
+import Show from "./Show";
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, setCountryFilter }) => {
   if (countries.length > 10) {
     return <p>Too many matches, specify another filter</p>;
   } else if (countries.length < 10 && countries.length > 1) {
     return countries.map((country, index) => (
-      <Country onlyName={true} key={index} country={country} />
+      <div key={index}>
+        <Show country={country} setCountryFilter={setCountryFilter} />
+      </div>
     ));
   } else if (countries.length === 1) {
     return countries.map((country, index) => (

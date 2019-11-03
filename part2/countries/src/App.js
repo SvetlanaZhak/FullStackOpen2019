@@ -34,8 +34,11 @@ const App = () => {
         countries={countries}
         countrySearch={countrySearch}
         onFilterSeacrh={onFilterSeacrh}
+      />{" "}
+      <Countries
+        countries={filteredCountries}
+        setCountryFilter={setCountryFilter}
       />
-      <Countries countries={filteredCountries} />
     </div>
   );
 };

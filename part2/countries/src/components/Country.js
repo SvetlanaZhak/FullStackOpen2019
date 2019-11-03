@@ -1,13 +1,6 @@
 import React from "react";
-
-const Country = ({ country, onlyName }) => {
-  if (onlyName === true) {
-    return (
-      <div>
-        <h1>{country.name}</h1>
-      </div>
-    );
-  }
+import Weather from "./Weather";
+const Country = ({ country }) => {
   return (
     <div>
       <h1>{country.name}</h1>
@@ -21,6 +14,7 @@ const Country = ({ country, onlyName }) => {
         })}
       </ul>
       <img src={country.flag} alt="flag" style={{ height: "100px" }} />
+      <Weather capital={country.capital} />
     </div>
   );
 };
