@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import personsService from "../services/Persons";
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, onPersonSuccess, onError }) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const onNameChange = event => {
@@ -19,11 +19,10 @@ const PersonForm = ({ persons, setPersons }) => {
       number: newNumber
     });
 
-    setPersons(persons.concat(personObject));
+    onPersonSuccess(persons.concat(personObject), `Added ${newName}`);
     setNewName("");
     setNewNumber("");
   };
-
   const findExistingPerson = newName => {
     return persons.find(person => person.name === newName);
   };
@@ -35,16 +34,24 @@ const PersonForm = ({ persons, setPersons }) => {
         `${personObject.name} is already added to phonebook, replace the old number with the new one?`
       )
     ) {
-      personsService.update(nameMatch.id, personObject).then(() => {
-        personsService
-          .getAll()
-          .then(updatedPersons => {
-            setPersons(updatedPersons);
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      });
+      personsService
+        .update(nameMatch.id, personObject)
+        .then(() => {
+          personsService
+            .getAll()
+            .then(updatedPersons => {
+              onPersonSuccess(
+                updatedPersons,
+                `Updated ${personObject.name}'s info`
+              );
+            })
+            .catch(error => {
+              onError(personObject);
+            });
+        })
+        .catch(error => {
+          onError(personObject);
+        });
     } else {
       setNewName("");
       setNewNumber("");
