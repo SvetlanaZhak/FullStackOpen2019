@@ -14,28 +14,59 @@ const PersonForm = ({ persons, setPersons }) => {
 
   /// addPerson
   const addPerson = async event => {
-    event.preventDefault();
-    if (checkExistingPer(newName) === false) {
-      const personObject = await personsService.create({
-        name: newName,
-        number: newNumber
-      });
+    const personObject = await personsService.create({
+      name: newName,
+      number: newNumber
+    });
 
-      setPersons(persons.concat(personObject));
+    setPersons(persons.concat(personObject));
+    setNewName("");
+    setNewNumber("");
+  };
+
+  const findExistingPerson = newName => {
+    return persons.find(person => person.name === newName);
+  };
+
+  //update person info
+  const updatePerson = (nameMatch, personObject) => {
+    if (
+      window.confirm(
+        `${personObject.name} is already added to phonebook, replace the old number with the new one?`
+      )
+    ) {
+      personsService.update(nameMatch.id, personObject).then(() => {
+        personsService
+          .getAll()
+          .then(updatedPersons => {
+            setPersons(updatedPersons);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      });
+    } else {
       setNewName("");
       setNewNumber("");
-    } else {
-      alert(`${newName} is already added to phonebook`);
     }
   };
 
-  const checkExistingPer = newName => {
-    return !!persons.find(person => person.name === newName);
+  //handle data
+  const handleData = event => {
+    event.preventDefault();
+    const nameObject = {
+      name: newName,
+      number: newNumber
+    };
+    const personMatch = findExistingPerson(newName);
+    personMatch === undefined
+      ? addPerson(nameObject)
+      : updatePerson(personMatch, nameObject);
   };
 
   return (
     <div>
-      <form onSubmit={addPerson}>
+      <form onSubmit={handleData}>
         <div>
           name: <input value={newName} onChange={onNameChange} />
         </div>
