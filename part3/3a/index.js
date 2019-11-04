@@ -36,6 +36,12 @@ app.get("/api/persons", (req, res) => {
   res.json(persons);
 });
 
+app.get("/info", (req, res) => {
+  personsNum = persons.length;
+  const info = `Phonebook has info for ${personsNum} people`;
+  res.send(`<p>${info}</p><p>${Date()}</p>`);
+});
+
 app.get("/api/persons/:id", (request, response) => {
   const id = Number(request.params.id);
   const person = persons.find(person => person.id === id);
@@ -52,9 +58,18 @@ app.delete("/api/persons/:id", (request, response) => {
 
   response.status(204).end();
 });
+
 const generateId = () => {
   const maxId = persons.length > 0 ? Math.max(...persons.map(n => n.id)) : 0;
   return maxId + 1;
+};
+const checkName = inputName => {
+  const match = persons.find(persons => persons.name === inputName);
+  if (match) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 app.post("/api/persons", (request, response) => {
@@ -65,16 +80,24 @@ app.post("/api/persons", (request, response) => {
       error: "Name is missing"
     });
   }
-
-  const person = {
-    name: body.name,
-    number: body.number,
-    id: generateId()
-  };
-
-  persons = persons.concat(person);
-
-  response.json(person);
+  if (!body.number) {
+    return response.status(400).json({
+      error: "Number is missing"
+    });
+  }
+  if (checkName(body.name) === false) {
+    const person = {
+      name: body.name,
+      number: body.number,
+      id: generateId()
+    };
+    persons = persons.concat(person);
+    response.json(person);
+  } else {
+    response.status(400).json({
+      error: "name must be unique"
+    });
+  }
 });
 
 const PORT = 3001;
