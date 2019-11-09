@@ -1,9 +1,16 @@
 const express = require("express");
 const app = express();
-
 const bodyParser = require("body-parser");
-
+const morgan = require('morgan');
 app.use(bodyParser.json());
+
+
+morgan.token("body", function (req) {
+  if (req.method === "POST") {
+    return JSON.stringify(req.body);
+  }
+});
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 let persons = [
   {
@@ -25,7 +32,8 @@ let persons = [
     name: "Mary Poppendieck",
     number: "39-23-6423122",
     id: 4
-  }
+  },
+
 ];
 
 app.get("/", (req, res) => {
@@ -80,12 +88,11 @@ app.post("/api/persons", (request, response) => {
       error: "Name is missing"
     });
   }
-  if (!body.number) {
+  else if (!body.number) {
     return response.status(400).json({
       error: "Number is missing"
     });
-  }
-  if (checkName(body.name) === false) {
+  } else if (checkName(body.name) === false) {
     const person = {
       name: body.name,
       number: body.number,
@@ -99,6 +106,11 @@ app.post("/api/persons", (request, response) => {
     });
   }
 });
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => {
