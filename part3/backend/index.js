@@ -102,49 +102,7 @@ app.post('/api/persons', (request, response, next) => {
     })
     .catch(error => next(error))
 });
-// const generateId = () => {
-//   const maxId = persons.length > 0 ? Math.max(...persons.map(n => n.id)) : 0;
-//   return maxId + 1;
-// };
-// const checkName = inputName => {
-//   const match = persons.find(persons => persons.name === inputName);
-//   if (match) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
-// app.post("/api/persons", (request, response, next) => {
-//   const body = request.body;
 
-//   if (!body.name) {
-//     return response.status(400).json({
-//       error: "Name is missing"
-//     });
-//   }
-//   else if (!body.number) {
-//     return response.status(400).json({
-//       error: "Number is missing"
-//     });
-//   } else if (checkName(body.name) === false) {
-//     const person = new Person({
-//       name: body.name,
-//       number: body.number,
-//       id: generateId()
-//     });
-//     persons = persons.concat(person);
-//     response.json(person);
-//     person.save().then(savedPerson => savedPerson.toJSON())
-//       .then(savedAndFormattedPerson => {
-//         response.json(savedAndFormattedPerson)
-//       }).catch(error => next(error))
-//   } else {
-//     response.status(400).json({
-//       error: "name must be unique"
-//     });
-
-//   }
-// });
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
 
