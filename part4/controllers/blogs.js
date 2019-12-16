@@ -26,11 +26,14 @@ blogsRouter.get('/:id', async (request, response, next) => {
 
 blogsRouter.post('/', async (request, response, next) => {
     const body = request.body
+    if (!body.likes) {
+        body.likes = 0
+    }
 
     const blog = new Blog({
         title: body.title,
         author: body.author,
-        url: "url",
+        url: body.url,
         likes: 0
     })
 

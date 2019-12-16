@@ -73,18 +73,41 @@ test('a valid blog can be added ', async () => {
     )
 })
 
-test('blogs without title is not added', async () => {
+test('default values of likes is 0', async () => {
     const newBlog = {
+        title: "About React patterns",
         author: "Michael Chan",
-        url: "https://reactpatterns.com/",
-        likes: 7
+        url: "https://reactpatterns.com/"
+    }
+    if (newBlog.likes === undefined) {
+        newBlog.likes = 0
     }
 
     await api
         .post('/api/blogs')
         .send(newBlog)
-        .expect(400)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd.length).toBe(helper.initialBlogs.length + 1)
+    const savedBlog = blogsAtEnd.find(r => r.title === newBlog.title)
+    expect(savedBlog.likes).toBe(0)
 
+})
+
+
+test('blogs without title and url are not added', async () => {
+    const newBlog = {
+        author: "Michael Chan",
+        likes: 7
+    }
+    if (newBlog.title === undefined || newBlog.url === undefined) {
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+    }
     const blogsAtEnd = await helper.blogsInDb()
 
     expect(blogsAtEnd.length).toBe(helper.initialBlogs.length)
