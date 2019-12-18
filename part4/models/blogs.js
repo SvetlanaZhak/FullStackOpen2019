@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-
+// const uniqueValidator = require('mongoose-unique-validator');
+// mongoose.set('useFindAndModify', false);
 const blogsSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -19,10 +20,14 @@ const blogsSchema = new mongoose.Schema({
 
     },
 
-    likes: Number
+    likes: Number,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 
 })
-
+// blogsSchema.plugin(uniqueValidator)
 
 blogsSchema.set('toJSON', {
     transform: (document, returnedObject) => {
