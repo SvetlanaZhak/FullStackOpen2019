@@ -1,4 +1,5 @@
 .DS_Store
+*/.DS_Store
 */node_modules/*
 oldpart4
 node_modules
