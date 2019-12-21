@@ -14,11 +14,26 @@ const Blog = ({ blog, setBlogs }) => {
     setVisible(!visible)
   }
 
-  // delete Blog
   const deleteBlog = event => {
     if (window.confirm(`Delete ${blog.title} ?`)) {
       blogsService
         .remove(blog.id)
+        .then(() => {
+          blogsService.getAll().then(updatedBlogs => {
+            setBlogs(updatedBlogs);
+          });
+        })
+        .catch(error => {
+          console.log("Blog does not exist");
+        });
+    }
+  };
+
+  const likeBlog = event => {
+    if (window.confirm(`Like ${blog.title} ?`)) {
+      blog.likes += 1
+      blogsService
+        .update(blog.id, blog)
         .then(() => {
           blogsService.getAll().then(updatedBlogs => {
             setBlogs(updatedBlogs);
@@ -49,6 +64,7 @@ const Blog = ({ blog, setBlogs }) => {
         link: {blog.url}
         <br />
         amount of likes: {" "}{blog.likes}
+        <button onClick={likeBlog}>like</button>
         <br />
         <button onClick={deleteBlog}>delete</button>
       </div>
