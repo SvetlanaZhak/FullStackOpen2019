@@ -14,16 +14,12 @@ import Togglable from './components/Togglable';
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  // const [newBlog, setNewBlog] = useState('')
-  // const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [filterTitle, setFilter] = useState('')
   const [successMessage, setSuccessMessage] = useState(null);
-  const [loginVisible, setLoginVisible] = useState(false)
-
 
   useEffect(() => {
     blogsService
@@ -41,6 +37,7 @@ const App = () => {
     }
   }, [])
 
+  const blogFormRef = React.createRef();
 
 
   const onFilterChange = event => {
@@ -81,8 +78,6 @@ const App = () => {
 
 
   const loginForm = () => {
-
-
     return (
       <div>
         <Togglable buttonLabel='login'>
@@ -103,6 +98,7 @@ const App = () => {
   );
 
   const onBlogSuccess = (blogs, message) => {
+    blogFormRef.current.toggleVisibility();
     setBlogs(blogs);
     setSuccessMessage(message);
     setTimeout(() => {
@@ -116,7 +112,6 @@ const App = () => {
       setErrorMessage("");
     }, 3000);
   };
-  console.log(onBlogSuccess)
   return (
     <div>
       <h1>Bloglist</h1>
@@ -139,11 +134,16 @@ const App = () => {
             onFilterChange={onFilterChange}
           />
           <h2>Add new Blog</h2>
-          <BlogForm
-            onBlogSuccess={onBlogSuccess}
-            onError={onError}
-            blogs={blogs}
-          />
+          <Togglable buttonLabel='new blog' ref={blogFormRef}>
+            <BlogForm
+              onBlogSuccess={onBlogSuccess}
+              onError={onError}
+              blogs={blogs}
+            />
+
+          </Togglable>
+
+
           <h2>List</h2>
           <Blogs blogs={filteredBlogs} setBlogs={setBlogs} />
           <Footer />
