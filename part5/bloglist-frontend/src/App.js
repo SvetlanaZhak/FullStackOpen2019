@@ -7,6 +7,8 @@ import Blogs from "./components/Blogs";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
 import loginService from './services/login'
+import LoginForm from './components/LoginForm';
+import Togglable from './components/Togglable';
 
 
 
@@ -20,6 +22,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [filterTitle, setFilter] = useState('')
   const [successMessage, setSuccessMessage] = useState(null);
+  const [loginVisible, setLoginVisible] = useState(false)
 
 
   useEffect(() => {
@@ -77,29 +80,23 @@ const App = () => {
   }
 
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
+  const loginForm = () => {
+
+
+    return (
       <div>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
+        <Togglable buttonLabel='login'>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+        </Togglable>
       </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
-  )
+    )
+  }
 
   const filteredBlogs = blogs.filter(
     blog => blog.title.toLowerCase().indexOf(filterTitle.toLowerCase()) !== -1
