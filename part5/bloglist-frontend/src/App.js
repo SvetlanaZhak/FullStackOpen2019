@@ -11,7 +11,6 @@ import LoginForm from './components/LoginForm';
 import Togglable from './components/Togglable';
 
 
-
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
@@ -20,6 +19,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [filterTitle, setFilter] = useState('')
   const [successMessage, setSuccessMessage] = useState(null);
+  console.log('app');
+  console.log(user);
 
 
 
@@ -119,7 +120,7 @@ const App = () => {
 
     } else {
       setBlogs(blogs.filter(b => b.id !== id));
-      setSuccessMessage(`'${id}' was deleted`);
+      setSuccessMessage(`Blog '${id}' was deleted`);
       setTimeout(() => {
         setSuccessMessage('');
       }, 5000)
@@ -159,13 +160,14 @@ const App = () => {
               onBlogSuccess={onBlogSuccess}
               onError={onError}
               blogs={blogs}
+              user={user}
             />
 
           </Togglable>
 
 
           <h2>List</h2>
-          <Blogs blogs={filteredBlogs} onDeleteBlog={onDeleteBlog} setBlogs={setBlogs} />
+          <Blogs blogs={filteredBlogs} onDeleteBlog={onDeleteBlog} setBlogs={setBlogs} user={user} />
           <Footer />
         </div>
       }

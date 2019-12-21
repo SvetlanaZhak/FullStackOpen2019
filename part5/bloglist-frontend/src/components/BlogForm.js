@@ -3,7 +3,7 @@ import blogsService from '../services/blogs';
 
 
 
-const BlogForm = ({ blogs, onBlogSuccess, onError }) => {
+const BlogForm = ({ blogs, onBlogSuccess, onError, user }) => {
   const [newTitle, setNewTitle] = useState("");
   const [newAuthor, setNewAuthor] = useState("");
   const [newUrl, setNewUrl] = useState("");
@@ -22,15 +22,23 @@ const BlogForm = ({ blogs, onBlogSuccess, onError }) => {
   const onLikesChange = event => {
     setNewLikes(event.target.value);
   };
+  console.log('form')
+  console.log(user)
+
 
   /// add Blog
   const addBlog = async event => {
-    blogsService.create({
+    const blog = {
       title: newTitle,
       author: newAuthor,
       url: newUrl,
-      likes: newLikes
-    }).then(createdBlog => {
+      likes: newLikes,
+      user,
+    };
+    blogsService.create(blog).then(createdBlog => {
+      console.log('AAA');
+      console.log(createdBlog);
+      createdBlog.user = user;
       onBlogSuccess(blogs.concat(createdBlog), `A new blog ${newTitle} by ${newAuthor} added`);
       setNewTitle("");
       setNewAuthor("");

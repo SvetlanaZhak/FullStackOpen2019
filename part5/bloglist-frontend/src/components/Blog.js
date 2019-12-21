@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import blogsService from "../services/blogs";
 
 
-const Blog = ({ blog, onDeleteBlog, setBlogs }) => {
+const Blog = ({ blog, onDeleteBlog, setBlogs, user }) => {
   const [visible, setVisible] = useState(false)
 
   const showWhenVisible = { display: visible ? '' : 'none' }
@@ -10,13 +10,19 @@ const Blog = ({ blog, onDeleteBlog, setBlogs }) => {
   const toggleVisibility = () => {
     setVisible(!visible)
   }
-
+  console.log('BLOG' + user.username);
+  console.log(blog.id);
+  const showForOwner = {
+    display: user.username === blog.user.username ? '' : 'none'
+  };
   const deleteBlog = async event => {
     event.preventDefault()
 
     if (window.confirm(`Do you want to delete ${blog.title}`)) {
       try {
-        console.log(event.target.value);
+        console.log('DELETE');
+        console.log(blog);
+        console.log(blog.id);
         await blogsService.remove(blog.id)
         onDeleteBlog(blog.id);
       } catch (error) {
@@ -64,7 +70,7 @@ const Blog = ({ blog, onDeleteBlog, setBlogs }) => {
         amount of likes: {" "}{blog.likes}
         <button onClick={likeBlog}>like</button>
         <br />
-        <button onClick={deleteBlog}>delete</button>
+        <button onClick={deleteBlog} style={showForOwner}>delete</button>
       </div>
     </div>
 
