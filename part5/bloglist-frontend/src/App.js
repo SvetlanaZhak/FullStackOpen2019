@@ -21,6 +21,9 @@ const App = () => {
   const [filterTitle, setFilter] = useState('')
   const [successMessage, setSuccessMessage] = useState(null);
 
+
+
+
   useEffect(() => {
     blogsService
       .getAll().then(initialBlogs => {
@@ -106,6 +109,23 @@ const App = () => {
     }, 3000);
   };
 
+  const onDeleteBlog = (id, error) => {
+    if (error) {
+      onError(`Blog '${id}' was already deleted`)
+      setTimeout(() => {
+        onError([])
+      }, 5000)
+
+
+    } else {
+      setBlogs(blogs.filter(b => b.id !== id));
+      setSuccessMessage(`'${id}' was deleted`);
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 5000)
+    }
+  }
+
   const onError = errorString => {
     setErrorMessage(errorString);
     setTimeout(() => {
@@ -145,7 +165,7 @@ const App = () => {
 
 
           <h2>List</h2>
-          <Blogs blogs={filteredBlogs} setBlogs={setBlogs} />
+          <Blogs blogs={filteredBlogs} onDeleteBlog={onDeleteBlog} setBlogs={setBlogs} />
           <Footer />
         </div>
       }

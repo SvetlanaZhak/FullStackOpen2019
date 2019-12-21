@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import blogsService from "../services/blogs";
-// const Blog = ({ blog }) => (
-//   <div>
-//     {blog.title} {blog.author}{blog.url}{blog.likes}
-//   </div>
-// )
-const Blog = ({ blog, setBlogs }) => {
+
+
+const Blog = ({ blog, onDeleteBlog, setBlogs }) => {
   const [visible, setVisible] = useState(false)
 
   const showWhenVisible = { display: visible ? '' : 'none' }
@@ -14,20 +11,21 @@ const Blog = ({ blog, setBlogs }) => {
     setVisible(!visible)
   }
 
-  const deleteBlog = event => {
-    if (window.confirm(`Delete ${blog.title} ?`)) {
-      blogsService
-        .remove(blog.id)
-        .then(() => {
-          blogsService.getAll().then(updatedBlogs => {
-            setBlogs(updatedBlogs);
-          });
-        })
-        .catch(error => {
-          console.log("Blog does not exist");
-        });
+  const deleteBlog = async event => {
+    event.preventDefault()
+
+    if (window.confirm(`Do you want to delete ${blog.title}`)) {
+      try {
+        console.log(event.target.value);
+        await blogsService.remove(blog.id)
+        onDeleteBlog(blog.id);
+      } catch (error) {
+
+
+      }
     }
-  };
+  }
+
 
   const likeBlog = event => {
     if (window.confirm(`Like ${blog.title} ?`)) {
