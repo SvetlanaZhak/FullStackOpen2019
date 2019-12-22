@@ -19,10 +19,6 @@ const App = () => {
   const [filterTitle, setFilter] = useState('')
   const [successMessage, setSuccessMessage] = useState(null);
 
-
-
-
-
   useEffect(() => {
     blogsService
       .getAll().then(initialBlogs => {
@@ -32,6 +28,9 @@ const App = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    console.log('MOIMIO');
+    console.log(loggedUserJSON);
+    console.log(window.localStorage);
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -41,11 +40,9 @@ const App = () => {
 
   const blogFormRef = React.createRef();
 
-
   const onFilterChange = event => {
     setFilter(event.target.value);
   };
-
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -57,7 +54,6 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
-
 
       blogsService.setToken(user.token)
       setUser(user)
@@ -77,7 +73,6 @@ const App = () => {
 
 
   }
-
 
   const loginForm = () => {
     return (
@@ -138,7 +133,7 @@ const App = () => {
         errorMessage={errorMessage}
         successMessage={successMessage}
       />
-      <h2>Login</h2>
+      <h2 className="Login">Login</h2>
 
       {user === null ?
         loginForm() :

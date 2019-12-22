@@ -49,7 +49,7 @@ const Blog = ({ blog, onDeleteBlog, setBlogs, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="Blog">
       <div onClick={toggleVisibility} style={{ fontWeight: 'bold', cursor: 'pointer' }}>
         {blog.title} by {blog.author}
       </div>
