@@ -4,9 +4,7 @@ import blogsService from "../services/blogs";
 
 const Blog = ({ blog, onDeleteBlog, setBlogs, user }) => {
   const [visible, setVisible] = useState(false)
-
   const showWhenVisible = { display: visible ? '' : 'none' }
-
   const toggleVisibility = () => {
     setVisible(!visible)
   }
@@ -16,15 +14,12 @@ const Blog = ({ blog, onDeleteBlog, setBlogs, user }) => {
   };
   const deleteBlog = async event => {
     event.preventDefault()
-
     if (window.confirm(`Do you want to delete ${blog.title}`)) {
       try {
-
         await blogsService.remove(blog.id)
         onDeleteBlog(blog.id);
       } catch (error) {
-
-
+        console.error(error);
       }
     }
   }
@@ -56,11 +51,9 @@ const Blog = ({ blog, onDeleteBlog, setBlogs, user }) => {
   return (
     <div style={blogStyle}>
       <div onClick={toggleVisibility} style={{ fontWeight: 'bold', cursor: 'pointer' }}>
-        {blog.title}
-
+        {blog.title} by {blog.author}
       </div>
-      <div style={showWhenVisible}>
-        by {blog.author}
+      <div style={showWhenVisible} className="BlogContent">
         <br />
         link: {blog.url}
         <br />

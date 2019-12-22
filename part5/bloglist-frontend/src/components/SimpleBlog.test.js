@@ -2,9 +2,8 @@ import 'jest-dom/extend-expect'
 import '@testing-library/react/cleanup-after-each'
 import React from 'react'
 import { render, fireEvent } from "@testing-library/react"
-import { prettyDOM } from "@testing-library/dom"
 import SimpleBlog from './SimpleBlog'
-import Blog from "./Blog"
+
 
 const blog = {
     title: 'TITLE',
@@ -31,4 +30,3 @@ test("clicking likes button twice calls event handler twice", () => {
     fireEvent.click(button)
     expect(mockHandler.mock.calls.length).toBe(2)
 })
-
