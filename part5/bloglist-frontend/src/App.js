@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import blogsService from './services/blogs'
 import Filter from "./components/Filter";
 import BlogForm from "./components/BlogForm";
-// import Blog from "./components/Blog";
 import Blogs from "./components/Blogs";
 import Notification from "./components/Notification";
 import Footer from "./components/Footer";
@@ -19,8 +18,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [filterTitle, setFilter] = useState('')
   const [successMessage, setSuccessMessage] = useState(null);
-  console.log('app');
-  console.log(user);
+
 
 
 

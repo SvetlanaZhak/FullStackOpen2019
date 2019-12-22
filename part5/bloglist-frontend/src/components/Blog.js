@@ -10,8 +10,7 @@ const Blog = ({ blog, onDeleteBlog, setBlogs, user }) => {
   const toggleVisibility = () => {
     setVisible(!visible)
   }
-  console.log('BLOG' + user.username);
-  console.log(blog.id);
+
   const showForOwner = {
     display: user.username === blog.user.username ? '' : 'none'
   };
@@ -20,9 +19,7 @@ const Blog = ({ blog, onDeleteBlog, setBlogs, user }) => {
 
     if (window.confirm(`Do you want to delete ${blog.title}`)) {
       try {
-        console.log('DELETE');
-        console.log(blog);
-        console.log(blog.id);
+
         await blogsService.remove(blog.id)
         onDeleteBlog(blog.id);
       } catch (error) {

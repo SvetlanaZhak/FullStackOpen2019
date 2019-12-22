@@ -22,8 +22,7 @@ const BlogForm = ({ blogs, onBlogSuccess, onError, user }) => {
   const onLikesChange = event => {
     setNewLikes(event.target.value);
   };
-  console.log('form')
-  console.log(user)
+
 
 
   /// add Blog
@@ -36,8 +35,7 @@ const BlogForm = ({ blogs, onBlogSuccess, onError, user }) => {
       user,
     };
     blogsService.create(blog).then(createdBlog => {
-      console.log('AAA');
-      console.log(createdBlog);
+
       createdBlog.user = user;
       onBlogSuccess(blogs.concat(createdBlog), `A new blog ${newTitle} by ${newAuthor} added`);
       setNewTitle("");
@@ -91,7 +89,7 @@ const BlogForm = ({ blogs, onBlogSuccess, onError, user }) => {
 
   //handle data
   const handleData = event => {
-    console.log(event.target.value)
+
 
 
     event.preventDefault();
@@ -101,7 +99,7 @@ const BlogForm = ({ blogs, onBlogSuccess, onError, user }) => {
       url: newUrl,
       likes: newLikes
     };
-    console.log(titleObject)
+
     const blogMatch = findExistingBlog(newTitle);
     blogMatch === undefined
       ? addBlog(titleObject)
