@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
-
 
 const useField = (type) => {
   const [value, setValue] = useState('')
@@ -19,13 +18,21 @@ const useField = (type) => {
 const useResource = (baseUrl) => {
   const [resources, setResources] = useState([])
 
-  // ...
+  const getAll = useCallback(async () => {
+    axios.get(baseUrl).then(response => response.data).then(items => setResources(items))
+  }, [baseUrl])
 
-  const create = (resource) => {
-    // ...
+  useEffect(() => {
+    getAll()
+  }, [getAll])
+
+  const create = async (resource) => {
+    const request = await axios.post(baseUrl, resource)
+    setResources(resources.concat(request.data))
   }
 
   const service = {
+    getAll,
     create
   }
 
@@ -46,25 +53,25 @@ const App = () => {
     event.preventDefault()
     noteService.create({ content: content.value })
   }
- 
+
   const handlePersonSubmit = (event) => {
     event.preventDefault()
-    personService.create({ name: name.value, number: number.value})
+    personService.create({ name: name.value, number: number.value })
   }
 
   return (
     <div>
       <h2>notes</h2>
       <form onSubmit={handleNoteSubmit}>
-        <input {...content} />
+        <input {...content} /><br />
         <button>create</button>
       </form>
       {notes.map(n => <p key={n.id}>{n.content}</p>)}
 
       <h2>persons</h2>
       <form onSubmit={handlePersonSubmit}>
-        name <input {...name} /> <br/>
-        number <input {...number} />
+        name <input {...name} /> <br />
+        number <input {...number} /><br />
         <button>create</button>
       </form>
       {persons.map(n => <p key={n.id}>{n.name} {n.number}</p>)}
