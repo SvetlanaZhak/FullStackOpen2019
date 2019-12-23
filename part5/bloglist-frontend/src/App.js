@@ -8,16 +8,17 @@ import Footer from "./components/Footer";
 import loginService from './services/login'
 import LoginForm from './components/LoginForm';
 import Togglable from './components/Togglable';
+import { useField } from "./hooks"
 
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [filterTitle, setFilter] = useState('')
   const [successMessage, setSuccessMessage] = useState(null);
+  const username = useField("text")
+  const password = useField("password")
 
   useEffect(() => {
     blogsService
@@ -28,9 +29,6 @@ const App = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    console.log('MOIMIO');
-    console.log(loggedUserJSON);
-    console.log(window.localStorage);
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -47,18 +45,16 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username, password,
-      })
-
+      const user = await loginService.login(
+        { username: username.value, password: password.value }
+      )
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
-
       blogsService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+      username.reset()
+      password.reset()
     } catch (exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
@@ -81,9 +77,7 @@ const App = () => {
           <LoginForm
             username={username}
             password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleSubmit={handleLogin}
+            handleLogin={handleLogin}
           />
         </Togglable>
       </div>
